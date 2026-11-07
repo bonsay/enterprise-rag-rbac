@@ -44,3 +44,7 @@ Users: `alice` (Finance), `bob` (HR), `carol` (Engineering), `dave` (Finance + E
 
 ## Production swaps
 `HashingEmbedder` → a hosted embedding model · `VectorStore` → pgvector / OpenSearch with an `allowed_roles` metadata filter · `UserDirectory` → OIDC/LDAP groups · heuristic guardrails → a classifier model as a second layer.
+
+## License
+
+[MIT](LICENSE)
