@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Build and test
+        run: mvn -B -ntp verify
+      - name: Publish RAG eval metrics
+        if: always()
+        run: |
+          if [ -f target/rag-eval/report.json ]; then
+            { echo '## RAG eval metrics'; echo '```json'; cat target/rag-eval/report.json; echo; echo '```'; } >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Upload eval reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-eval
+          path: target/rag-eval/
+          if-no-files-found: ignore
